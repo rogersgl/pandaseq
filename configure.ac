@@ -61,11 +61,13 @@ AC_SUBST(MODULE_LIBTOOL)
 AC_SUBST(MODULE_CFLAGS)
 AC_SUBST(MODULE_LDFLAGS)
 
-if test "$enable_threads" != no; then
-	ACX_PTHREAD
-else
-	acx_pthread_ok=no
-fi
+#if test "$enable_threads" != no; then
+	#ACX_PTHREAD
+#else
+	#acx_pthread_ok=no
+#fi
+#disable pthread always I think
+acx_pthread_ok=no
 AM_CONDITIONAL([PTHREAD], [test x$acx_pthread_ok = xyes])
 
 AG_CHECK_UNAME_SYSCALL
@@ -77,8 +79,11 @@ AC_CHECK_HEADERS([sys/sysctl.h], [], [],
 ]])
 
 PKG_CHECK_MODULES(Z, [ zlib ])
-PKG_CHECK_MODULES(CURL, [ libcurl ], [have_curl=true], [have_curl=false])
-AM_CONDITIONAL([LIBCURL], [test x$have_curl = xtrue])
+#PKG_CHECK_MODULES(CURL, [ libcurl ], [have_curl=true], [have_curl=false])
+#AM_CONDITIONAL([LIBCURL], [test x$have_curl = xtrue])
+#disable libcurl during compile I think
+have_curl=false
+AM_CONDITIONAL([LIBCURL], [false])
 LEGACY_CHECK_MODULES(BZ, [bzlib.h], [bz2], [BZ2_bzDecompressInit], [], [], [AC_MSG_ERROR([*** bzip2 required, install bzip2 library])])
 LEGACY_CHECK_MODULES(LTDL, [ltdl.h], [ltdl], [lt_dlinit], [], [], [AC_MSG_ERROR([*** ltld required, install libtool library. ])])
 
